@@ -1,0 +1,40 @@
+# --- Python cache ---
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# --- Virtual environment ---
+venv/
+.env/
+.venv/
+
+# --- Jupyter Notebook ---
+.ipynb_checkpoints/
+
+# --- Dati e modelli ---
+data/
+datasets/
+Datasets/
+*.csv
+*.tsv
+*.json
+*.pickle
+*.pkl
+*.h5
+*.hdf5
+*.joblib
+models/
+checkpoints/
+
+# --- Log e output ---
+logs/
+*.log
+
+# --- IDE / Editor ---
+.vscode/
+.idea/
+
+# --- Sistemi operativi ---
+.DS_Store
+Thumbs.db
