@@ -1,40 +1,24 @@
-# --- Python cache ---
-__pycache__/
-*.py[cod]
-*.pyo
-*.pyd
-
-# --- Virtual environment ---
+# Ambiente virtuale (NON va pushato: ricreabile da requirements.txt)
 venv/
-.env/
 .venv/
+env/
 
-# --- Jupyter Notebook ---
+# Dataset (NON pushati: vanno scaricati e messi in data/raw/ manualmente)
+data/raw/
+data/processed/
+
+# Cache e file compilati di Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Jupyter
 .ipynb_checkpoints/
 
-# --- Dati e modelli ---
-data/
-datasets/
-Datasets/
-*.csv
-*.tsv
-*.json
-*.pickle
-*.pkl
-*.h5
-*.hdf5
-*.joblib
-models/
-checkpoints/
-
-# --- Log e output ---
-logs/
-*.log
-
-# --- IDE / Editor ---
-.vscode/
-.idea/
-
-# --- Sistemi operativi ---
+# File di sistema
 .DS_Store
 Thumbs.db
+
+# IDE
+.vscode/
+.idea/

@@ -41,6 +41,7 @@ np.random.seed(SEED)
 # Il file usa il PUNTO E VIRGOLA come separatore (come gli altri CSV
 # usati nel corso, es. elenco-comuni.csv letto con sep=';').
 # Senza specificarlo, pandas leggerebbe tutto in un'unica colonna.
+
 PATH = "Datasets/bank-additional-full.csv"
 dataSet = pd.read_csv(PATH, sep=";")
  
