@@ -32,12 +32,12 @@ bank-marketing-ml/
 ├── data/
 │   ├── raw/            # dataset originale (da scaricare, non incluso)
 │   └── processed/      # manuale.csv e training.csv (generati dal Task 1)
-├── src/
-│   ├── task1_preparazione.py
-│   ├── task2_classificatori_manuali.py
-│   ├── task3_eda.py
-│   ├── task4_valutazione_manuali.py
-│   └── task5_sklearn.py
+├── notebooks/
+│   ├── task1_preparazione.ipynb
+│   ├── task2_classificatori_manuali.ipynb
+│   ├── task3_eda.ipynb
+│   ├── task4_valutazione_manuali.ipynb
+│   └── task5_sklearn.ipynb
 ├── results/            # grafici e output generati
 └── docs/
     └── documentazione.pdf
@@ -78,10 +78,8 @@ repository** ed è ricreabile dai comandi seguenti.
 
 **Linux / macOS:**
 ```bash
-
 python3 -m venv venv
 source venv/bin/activate
-
 ```
 
 **Windows (PowerShell):**
@@ -100,20 +98,25 @@ pip install -r requirements.txt
 
 ### 5. Eseguire i task
 
-I task vanno eseguiti in ordine (il Task 1 genera i file usati dagli altri):
+I task sono notebook Jupyter, da eseguire **in ordine** (il Task 1 genera i file
+usati dagli altri). Avviare Jupyter e aprire i notebook nella cartella `src/`:
 
 ```bash
-python src/task1_preparazione.py      # genera manuale.csv e training.csv
-python src/task2_classificatori_manuali.py
-python src/task3_eda.py
-python src/task4_valutazione_manuali.py
-python src/task5_sklearn.py
+jupyter src
 ```
 
-Per uscire dall'ambiente virtuale al termine:
+In alternativa, da riga di comando si può eseguire un notebook senza aprirlo:
+
 ```bash
-deactivate
+jupyter nbconvert --to src --execute --inplace src/task1.ipynb
 ```
+
+Ordine consigliato:
+1. `task1.ipynb` — genera `manuale.csv` e `training.csv`
+2. `task2_classificatori_manuali.ipynb`
+3. `task3_eda.ipynb`
+4. `task4_valutazione_manuali.ipynb`
+5. `task5_sklearn.ipynb`
 
 ---
 
