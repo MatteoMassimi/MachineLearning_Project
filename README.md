@@ -25,22 +25,21 @@ Fonte ufficiale: https://archive.ics.uci.edu/dataset/222/bank+marketing
 ## Struttura del progetto
 
 ```
-bank-marketing-ml/
+MachineLearning_Project/
 ├── README.md
 ├── requirements.txt
 ├── .gitignore
+├── traccia_progetto.pdf   # traccia ufficiale del progetto
 ├── data/
-│   ├── raw/            # dataset originale (da scaricare, non incluso)
-│   └── processed/      # manuale.csv e training.csv (generati dal Task 1)
-├── notebooks/
-│   ├── task1_preparazione.ipynb
-│   ├── task2_classificatori_manuali.ipynb
-│   ├── task3_eda.ipynb
-│   ├── task4_valutazione_manuali.ipynb
-│   └── task5_sklearn.ipynb
-├── results/            # grafici e output generati
-└── docs/
-    └── documentazione.pdf
+│   ├── raw/               # dataset originale (da scaricare, non incluso)
+│   └── processed/         # manuale.csv e training.csv (generati dal Task 1)
+└── src/
+    ├── task1.ipynb               # preparazione del dataset
+    ├── task2_1R.ipynb            # classificatore manuale: 1R
+    ├── task2_NaiveBayes.ipynb    # classificatore manuale: Naïve Bayes
+    ├── task3.ipynb               # analisi esplorativa (EDA)
+    ├── task4.ipynb               # valutazione dei classificatori manuali
+    └── task5.ipynb               # addestramento con Scikit-Learn
 ```
 
 ---
@@ -73,22 +72,22 @@ data/raw/
 
 ### 3. Creare e attivare l'ambiente virtuale
 
-L'ambiente virtuale (`venv`) isola le librerie del progetto. **Non è incluso nel
+L'ambiente virtuale (`.venv`) isola le librerie del progetto. **Non è incluso nel
 repository** ed è ricreabile dai comandi seguenti.
 
 **Linux / macOS:**
 ```bash
-python3 -m venv venv
-source venv/bin/activate
+python3 -m venv .venv
+source .venv/bin/activate
 ```
 
 **Windows (PowerShell):**
 ```powershell
-python -m venv venv
-venv\Scripts\activate
+python -m venv .venv
+.venv\Scripts\Activate.ps1
 ```
 
-A ambiente attivo, il prompt mostra `(venv)` all'inizio della riga.
+A ambiente attivo, il prompt mostra `(.venv)` all'inizio della riga.
 
 ### 4. Installare le dipendenze
 
@@ -99,24 +98,24 @@ pip install -r requirements.txt
 ### 5. Eseguire i task
 
 I task sono notebook Jupyter, da eseguire **in ordine** (il Task 1 genera i file
-usati dagli altri). Avviare Jupyter e aprire i notebook nella cartella `src/`:
+usati dagli altri). Avviare Jupyter Lab e aprire i notebook nella cartella `src/`:
 
 ```bash
-jupyter src
+jupyter lab
 ```
 
 In alternativa, da riga di comando si può eseguire un notebook senza aprirlo:
 
 ```bash
-jupyter nbconvert --to src --execute --inplace src/task1.ipynb
+jupyter nbconvert --to notebook --execute --inplace src/task1.ipynb
 ```
 
 Ordine consigliato:
 1. `task1.ipynb` — genera `manuale.csv` e `training.csv`
-2. `task2_classificatori_manuali.ipynb`
-3. `task3_eda.ipynb`
-4. `task4_valutazione_manuali.ipynb`
-5. `task5_sklearn.ipynb`
+2. `task2_1R.ipynb` e `task2_NaiveBayes.ipynb` — classificatori manuali
+3. `task3.ipynb` — analisi esplorativa (EDA)
+4. `task4.ipynb` — valutazione dei classificatori manuali
+5. `task5.ipynb` — addestramento con Scikit-Learn
 
 ---
 
@@ -125,7 +124,7 @@ Ordine consigliato:
 1. **Preparazione del dataset** — pulizia ed estrazione di `manuale.csv` (12 istanze
    per i calcoli a mano) e `training.csv` (dataset di lavoro).
 2. **Classificatori manuali** — definizione e implementazione a mano di due modelli
-   (Naïve Bayes e KNN) su `manuale.csv`.
+   (1R e Naïve Bayes) su `manuale.csv`, in due notebook distinti.
 3. **Analisi esplorativa (EDA)** — controllo qualità, boxplot, pairplot, matrice di
    correlazione su `training.csv`.
 4. **Valutazione dei classificatori manuali** su `training.csv` e ottimizzazione.
