@@ -33,6 +33,12 @@ MachineLearning_Project/
 ├── data/
 │   ├── raw/               # dataset originale (da scaricare, non incluso)
 │   └── processed/         # manuale.csv e training.csv (generati dal Task 1)
+├── docs/                  # documentazione: un file .md per ogni task
+│   ├── task1.md           # preparazione del dataset
+│   ├── task2.md           # classificatori manuali (1R e Naïve Bayes)
+│   ├── task3.md           # analisi esplorativa (EDA)
+│   ├── task4.md           # valutazione dei classificatori manuali
+│   └── task5.md           # addestramento con Scikit-Learn
 └── src/
     ├── task1.ipynb               # preparazione del dataset
     ├── task2_1R.ipynb            # classificatore manuale: 1R
@@ -41,6 +47,10 @@ MachineLearning_Project/
     ├── task4.ipynb               # valutazione dei classificatori manuali
     └── task5.ipynb               # addestramento con Scikit-Learn
 ```
+
+> **Documentazione.** Il codice vive nei notebook in `src/`; la **documentazione
+> discorsiva** di ogni task (cosa è stato fatto e perché) è raccolta in `docs/`,
+> con un file `.md` per task. Ogni notebook rimanda in cima al rispettivo documento.
 
 ---
 

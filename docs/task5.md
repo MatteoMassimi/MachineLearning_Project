@@ -2,7 +2,7 @@
 
 **Corso:** Fondamenti e Applicazioni del Machine Learning (FML 2026)
 **Dataset:** Bank Marketing (UCI) — previsione della sottoscrizione di un deposito vincolato
-**Codice di riferimento:** `notebooks/task5_pipeline.ipynb`
+**Codice di riferimento:** `src/task5.ipynb`
 **Libro di testo:** Witten, Frank, Hall, Pal — *Data Mining* (4ª ed.)
 
 ---
@@ -20,7 +20,7 @@ La traccia richiede, con riferimento a `training.csv`, di:
    sul file `real_settings.csv`.
 
 Questo documento descrive le decisioni prese e le loro motivazioni. Il codice completo,
-eseguibile e commentato, si trova nel notebook `task5_pipeline.ipynb`.
+eseguibile e commentato, si trova nel notebook `src/task5.ipynb`.
 
 ---
 
