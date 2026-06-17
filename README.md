@@ -1,21 +1,20 @@
 # Bank Marketing — Progetto di Machine Learning
 
-Progetto per il corso **Fondamenti e Applicazioni del Machine Learning (FML 2026)**.
+---
 
-L'obiettivo è costruire un classificatore binario che predica se un cliente di una
-banca portoghese **sottoscriverà un deposito a termine** (`y = yes/no`), a partire
-dai dati di una campagna di telemarketing.
+## Autori
+
+- Matteo Massimi — 294140
+- Lorenzo Coppolone — 292092
 
 ---
 
 ## Dataset
 
 Si utilizza il dataset **Bank Marketing** dello UCI Machine Learning Repository,
-nella versione arricchita `bank-additional-full.csv` (41.188 istanze, 20 attributi
-+ classe), che include cinque variabili di contesto socioeconomico.
+nella versione arricchita `bank-additional-full.csv` (41.188 istanze, 20+ attributi classe), che include cinque variabili di contesto socioeconomico.
 
-> ⚠️ **I dataset NON sono inclusi in questo repository** (sono esclusi tramite
-> `.gitignore`). Vanno scaricati e posizionati manualmente — vedi la sezione
+> ⚠️ **I dataset NON sono inclusi in questo repository** . Vanno scaricati e posizionati manualmente — vedi la sezione
 > [Configurazione](#configurazione).
 
 Fonte ufficiale: https://archive.ics.uci.edu/dataset/222/bank+marketing
@@ -56,19 +55,13 @@ MachineLearning_Project/
 
 ## Configurazione
 
-### 1. Clonare il repository
+### 1. Scaricare il dataset
 
-```bash
-git clone https://github.com/<utente>/bank-marketing-ml.git
-cd bank-marketing-ml
-```
-
-### 2. Scaricare il dataset
-
-I dati non sono versionati. Scaricarli dallo UCI Repository:
+I dati grezzi non sono presenti nella cartella. Seguire i seguenti passi:
 
 1. Aprire https://archive.ics.uci.edu/dataset/222/bank+marketing
 2. Scaricare l'archivio e scompattarlo
+3. Creare un package data e al suo interno due sottopackage : raw (contiene il dataset grezzo e la relativa documentazione) e processed ( contiene i datasets ottenuti nel Task 1)
 3. Copiare il file `bank-additional-full.csv` (e `bank-additional-names.txt`)
    nella cartella `data/raw/`
 
@@ -80,7 +73,7 @@ data/raw/
 └── bank-additional-names.txt
 ```
 
-### 3. Creare e attivare l'ambiente virtuale
+### 2. Creare e attivare l'ambiente virtuale
 
 L'ambiente virtuale (`.venv`) isola le librerie del progetto. **Non è incluso nel
 repository** ed è ricreabile dai comandi seguenti.
@@ -99,26 +92,15 @@ python -m venv .venv
 
 A ambiente attivo, il prompt mostra `(.venv)` all'inizio della riga.
 
-### 4. Installare le dipendenze
+### 3. Installare le dipendenze
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 5. Eseguire i task
+### 4. Eseguire i task
 
-I task sono notebook Jupyter, da eseguire **in ordine** (il Task 1 genera i file
-usati dagli altri). Avviare Jupyter Lab e aprire i notebook nella cartella `src/`:
-
-```bash
-jupyter lab
-```
-
-In alternativa, da riga di comando si può eseguire un notebook senza aprirlo:
-
-```bash
-jupyter nbconvert --to notebook --execute --inplace src/task1.ipynb
-```
+Poiche i Tasks 2-5 utilizzano datasets generati nel Task 1 , si consiglia di eseguire i tasks **in ordine**.
 
 Ordine consigliato:
 1. `task1.ipynb` — genera `manuale.csv` e `training.csv`
@@ -129,7 +111,7 @@ Ordine consigliato:
 
 ---
 
-## Task del progetto
+## Tasks del progetto
 
 1. **Preparazione del dataset** — pulizia ed estrazione di `manuale.csv` (12 istanze
    per i calcoli a mano) e `training.csv` (dataset di lavoro).
@@ -141,18 +123,3 @@ Ordine consigliato:
 5. **Addestramento con Scikit-Learn** — più classificatori, holdout stratificato,
    ottimizzazione degli iperparametri, selezione del modello migliore.
 
----
-
-## Autori
-
-- Nome Cognome — matricola
-- Nome Cognome — matricola
-
----
-
-## Note
-
-- Tutti gli script fissano il seme dei generatori casuali per garantire la
-  **riproducibilità** dei risultati.
-- L'attributo `duration` viene escluso dalla modellazione finale: non è noto prima
-  della telefonata, quindi includerlo produrrebbe un modello non realistico.
