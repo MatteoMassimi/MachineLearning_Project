@@ -3,33 +3,23 @@
 **Corso:** Fondamenti e Applicazioni del Machine Learning (FML 2026)
 **Dataset:** `manuale.csv` (12 istanze, generato dal Task 1)
 **Codice di riferimento:** `src/task2_1R.ipynb` e `src/task2_NaiveBayes.ipynb`
-**Libro di testo:** Witten, Frank, Hall, Pal — *Data Mining* (4ª ed.), cap. 4 — Lezione 5
+
 
 ---
 
 ## 1. Obiettivo del task
-
-La traccia, per un gruppo da due persone, chiede di **definire, adattare ai dati,
+L'Obiettivo e quello di **definire, adattare ai dati,
 implementare e valutare a mano due classificatori** su `manuale.csv`. I due scelti
-sono **1R** e **Naïve Bayes**, entrambi visti nella Lezione 5. I due classificatori
-sono stati separati in **due notebook distinti** per chiarezza.
+sono **1R** e **Naïve Bayes**, separati in **due notebook distinti** per chiarezza.
 
-Entrambi i notebook seguono la stessa **struttura espositiva passo-passo**: caricamento,
-richiamo teorico, calcolo manuale delle quantità rilevanti (errori per 1R, probabilità
-condizionate per Naïve Bayes), implementazione in Python che rispecchia uno-a-uno i calcoli a
-mano, e infine valutazione con metriche complete e discussione critica.
 
-**Valutazione sullo stesso file.** Coerentemente con il testo letterale della traccia
-(*"valutando le prestazioni da loro ottenute sullo stesso file manuale.csv"*), entrambi i
-classificatori vengono valutati **sullo stesso `manuale.csv`** su cui sono costruiti (training =
-test). Le metriche risultanti sono quindi **ottimistiche** e vanno lette come *illustrative* del
-funzionamento, non come stime di generalizzazione: la valutazione statisticamente robusta è nei
-Task 4 e 5.
 
-**Stile di codice.** Vettoriale (pandas/numpy: `groupby`, `crosstab`, `value_counts`,
-`apply`, `idxmax`), **senza cicli `for` espliciti né list comprehension**, coerentemente con i
-notebook del corso. L'uso di `apply(axis=1)` per applicare la predizione riga per riga è
-considerato accettabile (è la stessa tecnica usata negli esempi del corso).
+**Valutazione sullo stesso file.** 
+Entrambi iclassificatori vengono valutati **sullo stesso `manuale.csv`** su cui sono costruiti .
+I risultanti ottenuti non sono da considerare rilevanti qualitativamente in quanti abbiamo lavorato appunto su un dataset giocattolo :
+ la valutazione statisticamente robusta è neiTask 4 e 5.
+
+
 
 **Attributi:** numerici `age`, `campaign`; nominali `job`, `marital`, `education`,
 `housing`, `loan`, `contact`, `poutcome`. Le 12 istanze sono bilanciate 6 `yes` / 6 `no`.
@@ -53,14 +43,15 @@ Per gli **attributi numerici** (`age`, `campaign`) 1R richiede una
 **discretizzazione**: i valori continui vengono divisi in intervalli (*bin*). Nel
 notebook si usa un binning semplice sulla **mediana** (due intervalli).
 
-> **Punto critico (dalle slide):** 1R tende all'**overfitting** quando un attributo
+> **Punto critico :** 1R tende all'**overfitting** quando un attributo
 > ha **molti valori distinti**. Al limite, un valore diverso per ogni istanza darebbe
 > 0 errori ma sarebbe inutile.
 
 ### 2.2 Adattamento ai dati e implementazione
 
-- `regola_e_errori(serie_attr, y)` costruisce la regola (`crosstab` + `idxmax`) e conta gli
-  errori: per ogni valore, errori = totale − conteggio della classe a maggioranza.
+- Inizialmente sono state reailzzate due funzioni : `regole_e_errori_attributo` che implementa 1R per un singolo attributo
+ e `errori_nominale` che invece applica 1R a tutti gli attributi nominali
+ 
 - Gli errori si calcolano per **tutti** gli attributi (nominali direttamente,
   numerici dopo binning sulla mediana), iterando con `apply` su una `Series`.
 - `addestra_1R` sceglie l'attributo con meno errori e ne memorizza la regola;
@@ -191,12 +182,3 @@ ottimizzarne le prestazioni.
 
 ---
 
-## 6. Concetti del corso utilizzati
-
-| Concetto | Lezione |
-|---|---|
-| Attributi numerici vs nominali, discretizzazione | 3 |
-| 1R, overfitting da molti valori | 5 |
-| Naïve Bayes, regola di Bayes, stimatore di Laplace | 5 |
-| Accuracy, confusion matrix, precision, recall, F1 | 8 |
-| Uso di API (CategoricalNB) come controprova | trasversale |
