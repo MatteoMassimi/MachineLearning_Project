@@ -94,7 +94,7 @@ $$ P(c \mid x_1,\dots,x_n) \propto P(c)\cdot \prod_{i=1}^{n} P(x_i \mid c) $$
 
 dove $P(c)$ è la probabilità **a priori** della classe e $P(x_i \mid c)$ la
 **verosimiglianza** dell'attributo data la classe. Il prodotto assume
-l'**indipendenza** degli attributi (da qui "naïve"). Si sceglie la classe col
+l'**indipendenza** degli attributi . Si sceglie la classe col
 prodotto più alto (regola **MAP**).
 
 **Trattamento degli attributi nel notebook:**
@@ -113,7 +113,7 @@ valori) avrebbero quasi una sola istanza per valore. Si selezionano quindi **cin
 informative e a bassa cardinalità: `marital`, `housing`, `loan` (nominali) + `age`, `campaign`
 (numerici discretizzati).
 
-Il notebook svolge prima il calcolo **a mano su una singola istanza** (la riga 0), mostrando
+Il notebook svolge prima il calcolo **a mano su una singola istanza** , mostrando
 esplicitamente prior, verosimiglianze con Laplace e combinazione finale. Poi raccoglie tutte le
 probabilità condizionate in una struttura dati (scritte esplicitamente come frazioni, per
 rispecchiare i calcoli a mano) e definisce `predict_naive_bayes`, che parte dai prior e
@@ -133,7 +133,7 @@ Valutato **sullo stesso `manuale.csv`**, Naïve Bayes ottiene:
 
 Matrice di confusione: TN=5, FP=1, FN=2, TP=4 (9 istanze su 12 corrette).
 
-- Sull'istanza di esempio (riga 0) Naïve Bayes predice `y=0` mentre la classe reale è `y=1`: un
+- Sull'istanza di esempio  Naïve Bayes predice `y=0` mentre la classe reale è `y=1`: un
   **errore**. I punteggi delle due classi erano quasi identici (0.00508 vs 0.00488): con pochi
   dati lo stimatore di Laplace appiattisce le probabilità e basta poco per ribaltare la
   decisione.
@@ -144,19 +144,17 @@ Matrice di confusione: TN=5, FP=1, FN=2, TP=4 (9 istanze su 12 corrette).
 
 ### 3.4 Controprova con Scikit-Learn
 
-La traccia consente l'uso di API. Come controprova si usa **`CategoricalNB`** (la variante di
-Naïve Bayes per attributi categorici, concettualmente la più vicina all'implementazione a mano)
-con `alpha=1` (smoothing di Laplace), sulle stesse cinque feature discretizzate e valutato sullo
+Come controprova si usa **`CategoricalNB`** (API scklearn) sulle stesse cinque feature discretizzate e valutato sullo
 stesso file. Il risultato (accuratezza 75%) **coincide** con l'implementazione manuale,
 confermandone la correttezza. Eventuali minime differenze sono dovute al modo in cui
-`CategoricalNB` apprende l'insieme dei valori e gestisce internamente conteggi e smoothing.
+`CategoricalNB` apprende l'insieme dei valori e gestisce internamente conteggi .
 
 ---
 
 ## 4. Metodo di valutazione
 
-Come richiesto dalla traccia, la valutazione è svolta **sullo stesso file `manuale.csv`** su cui
-i modelli sono costruiti. Le metriche utilizzate (Lezione 8) sono **Accuracy, Confusion Matrix,
+La valutazione è svolta **sullo stesso file `manuale.csv`** su cui
+i modelli sono costruiti. Le metriche utilizzate  sono **Accuracy, Confusion Matrix,
 Precision, Recall, F1-Score**, con classe positiva `y = 1`.
 
 > **Avvertenza.** Con sole **12 istanze** e con training = test, le metriche sono **poco
