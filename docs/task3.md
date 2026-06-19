@@ -8,19 +8,13 @@
 
 ## 1. Obiettivo del task
 
-La traccia chiede di:
 
 1. **verificare** che il dataset non contenga osservazioni palesemente errate;
 2. effettuare l'**analisi esplorativa** (EDA), rappresentando i risultati anche in
    forma grafica: **boxplot**, **pairplot** e **matrice di correlazione**.
 
-**Stile di codice.** Vettoriale (pandas/numpy/`groupby`), senza cicli `for`
-espliciti. I grafici usano **matplotlib** (stile `seaborn-v0_8`, come nei notebook
-del corso) e **seaborn** per heatmap e pairplot. Gli attributi numerici e nominali
-sono separati con `select_dtypes` (Lezione 3).
-
 > **Nota su `duration`.** Viene **incluso** nell'analisi proprio per *vedere* il suo
-> effetto, pur sapendo (documentazione UCI) che la durata della chiamata non è nota
+> effetto, pur sapendo  che la durata della chiamata non è nota
 > *prima* della chiamata e andrà quindi **esclusa** dal modello predittivo (Task 5).
 
 ---
@@ -29,7 +23,7 @@ sono separati con `select_dtypes` (Lezione 3).
 
 ### 2.1 Statistiche descrittive e valori impossibili
 
-`describe()` riassume le numeriche. **Nessun valore impossibile**: tutti i minimi
+ **Nessun valore impossibile**: tutti i minimi
 sono ≥ 0 (nessuna età o durata negativa). Emergono però due elementi da
 interpretare: `pdays` arriva a 999 e `duration`/`campaign` hanno massimi molto alti.
 
@@ -43,11 +37,11 @@ poco informativo e andrebbe trasformato (nota per il Task 5).
 ### 2.3 Valori mancanti (`unknown`)
 
 Come nel Task 1, i mancanti sono la stringa `"unknown"`. Vengono contati per attributo
-nominale (vettoriale con `apply`) per quantificarne la diffusione.
+nominale  per quantificarne la presenza.
 
 ### 2.4 Duplicati
 
-Nessun duplicato residuo: erano già stati rimossi nel Task 1.
+Poiche sono gia stati trattati nel task 1 , il dataset non presenta istanze duplicate.
 
 ### 2.5 Outlier estremi
 
@@ -62,8 +56,7 @@ perché alcuni modelli sono sensibili agli outlier.
 
 ## 3. Boxplot degli attributi numerici
 
-Il **boxplot** mostra mediana, quartili e outlier di ogni variabile. Si usa
-`plot(kind="box", subplots=True)` per generare una griglia senza ciclo `for`.
+Il **boxplot** mostra mediana, quartili e outlier di ogni variabile.
 
 Si osservano **scale molto diverse** (es. `nr.employed` ~5000 contro `previous`
 ~0–7): un motivo per cui alcuni modelli richiederanno la **normalizzazione** (Task
@@ -73,10 +66,8 @@ Si osservano **scale molto diverse** (es. `nr.employed` ~5000 contro `previous`
 
 ## 4. Matrice di correlazione
 
-Calcolata con `df.corr()` e visualizzata con una **heatmap** di seaborn. Le
-correlazioni con il target vengono poi ordinate.
 
-**Osservazioni critiche (centrali per l'orale):**
+**Osservazioni critiche :**
 
 - **`duration` è il più correlato con il target (~0.41)**, di gran lunga. Ma è
   proprio l'attributo da **escludere**: la durata è nota solo *dopo* la chiamata,
@@ -108,7 +99,7 @@ basso**, coerentemente con la matrice di correlazione.
 ## 6. Analisi degli attributi nominali
 
 Per le variabili nominali l'indicatore più utile è il **tasso di sottoscrizione**
-(media di `y`) per categoria, calcolato con `groupby` e visualizzato con barplot
+(media di `y`) per categoria, visualizzato con barplot
 orizzontali.
 
 **Osservazioni:**
@@ -136,12 +127,4 @@ orizzontali.
 
 ---
 
-## 8. Concetti del corso utilizzati
 
-| Concetto | Lezione |
-|---|---|
-| Attributi numerici vs nominali | 3 |
-| EDA, boxplot, correlazione, pairplot | trasversale / 8 |
-| Necessità di normalizzazione (scale diverse) | 11 |
-| Data leakage (`duration`) | trasversale |
-| Multicollinearità | trasversale |
