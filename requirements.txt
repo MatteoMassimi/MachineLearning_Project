@@ -6,3 +6,4 @@ seaborn>=0.13,<0.14
 scipy>=1.13,<1.18
 jupyter>=1.0
 ipykernel>=6.29,<7.0
+ipynb>=7.37,<8.0
