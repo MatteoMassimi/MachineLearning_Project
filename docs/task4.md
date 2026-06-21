@@ -111,13 +111,4 @@ iperparametri e selezione del modello migliore sul test set.
 
 ---
 
-## 8. Concetti del corso utilizzati
 
-| Concetto | Lezione |
-|---|---|
-| Holdout stratificato, baseline, metriche | 8 |
-| Precision, recall, F1, matrice di confusione | 8 |
-| Discretizzazione (`qcut`) e ottimizzazione dei bin per 1R | 5 |
-| GaussianNB e OrdinalEncoder senza leakage | 11 |
-| Data leakage (`duration`) | trasversale |
-| Sbilanciamento delle classi | trasversale |
