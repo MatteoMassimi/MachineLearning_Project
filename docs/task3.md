@@ -1,7 +1,7 @@
 # Task 3 — Analisi esplorativa di `training.csv`
 
 **Corso:** Fondamenti e Applicazioni del Machine Learning (FML 2026)
-**Dataset:** `training.csv` (~41.176 istanze, generato dal Task 1)
+**Dataset:** `training.csv` (~41.176 istanze × 20 attributi, generato dal Task 1)
 **Codice di riferimento:** `src/task3.ipynb`
 
 ---
@@ -13,9 +13,10 @@
 2. effettuare l'**analisi esplorativa** (EDA), rappresentando i risultati anche in
    forma grafica: **boxplot**, **pairplot** e **matrice di correlazione**.
 
-> **Nota su `duration`.** Viene **incluso** nell'analisi proprio per *vedere* il suo
-> effetto, pur sapendo  che la durata della chiamata non è nota
-> *prima* della chiamata e andrà quindi **esclusa** dal modello predittivo (Task 5).
+> **Nota su `duration`.** A differenza di altre impostazioni del problema, qui `duration`
+> **non compare**: è stato **rimosso nel Task 1** perché costituisce *data leakage* (la durata
+> della chiamata è nota solo *dopo* la chiamata). L'EDA lavora quindi sui 19 attributi predittivi
+> realmente utilizzabili, più il target.
 
 ---
 
@@ -23,34 +24,36 @@
 
 ### 2.1 Statistiche descrittive e valori impossibili
 
- **Nessun valore impossibile**: tutti i minimi
-sono ≥ 0 (nessuna età o durata negativa). Emergono però due elementi da
-interpretare: `pdays` arriva a 999 e `duration`/`campaign` hanno massimi molto alti.
+**Nessun valore impossibile**: tutti i minimi sono ≥ 0 (nessuna età negativa; l'età va da 17 a 98
+anni). Emergono però due elementi da interpretare: `pdays` arriva a 999 e `campaign` ha un massimo
+molto alto (56).
 
 ### 2.2 Il codice speciale di `pdays`
 
 `pdays` (giorni dall'ultimo contatto di una campagna precedente) vale **999** come
 **codice convenzionale** per "mai contattato prima", non come valore reale. Risulta
-che **~96%** dei clienti non era mai stato contattato: `pdays` così com'è è quindi
-poco informativo e andrebbe trasformato (nota per il Task 5).
+che il **~96%** (precisamente 96.3%) dei clienti non era mai stato contattato: `pdays` è quindi
+una **near-constant feature**, poco informativa e potenziale fonte di rumore. Per questo verrà
+**escluso dalle variabili di addestramento** nel Task 5.
 
 ### 2.3 Valori mancanti (`unknown`)
 
-Come nel Task 1, i mancanti sono la stringa `"unknown"`. Vengono contati per attributo
-nominale  per quantificarne la presenza.
+I mancanti del dataset originale erano la stringa `"unknown"`. **Sono già stati imputati con la
+moda nel Task 1**, quindi in `training.csv` non sono più presenti come categoria a sé.
 
 ### 2.4 Duplicati
 
-Poiche sono gia stati trattati nel task 1 , il dataset non presenta istanze duplicate.
+Le istanze identiche **iniziali** sono già state rimosse nel Task 1. I duplicati generati
+successivamente dall'imputazione sono stati **deliberatamente mantenuti** (osservazioni valide e
+coerenti col dominio), come discusso nel Task 1: non rappresentano un problema per l'analisi.
 
 ### 2.5 Outlier estremi
 
-`campaign` arriva a 56 contatti nella stessa campagna e `duration` a oltre 80 minuti.
-Sono valori **plausibili ma anomali**, non errori da rimuovere. Vengono annotati
-perché alcuni modelli sono sensibili agli outlier.
+`campaign` arriva a **56 contatti** nella stessa campagna: un valore **plausibile ma anomalo**,
+non un errore da rimuovere. Viene annotato perché alcuni modelli sono sensibili agli outlier.
 
 **Conclusione:** nessuna osservazione palesemente errata; gli unici punti da
-*interpretare* sono il codice `pdays=999` e i valori `unknown`.
+*interpretare* sono il codice `pdays=999` e gli outlier di coda.
 
 ---
 
@@ -59,21 +62,22 @@ perché alcuni modelli sono sensibili agli outlier.
 Il **boxplot** mostra mediana, quartili e outlier di ogni variabile.
 
 Si osservano **scale molto diverse** (es. `nr.employed` ~5000 contro `previous`
-~0–7): un motivo per cui alcuni modelli richiederanno la **normalizzazione** (Task
-5). Si vede inoltre la forte presenza di **outlier** in `duration` e `campaign`.
+~0–7): un motivo per cui alcuni modelli richiederanno la **standardizzazione** (Task
+5). Si vedono inoltre marcate **code destre** (molti outlier) in `campaign` e `previous`, tipiche
+di variabili di conteggio, mentre `pdays` appare schiacciato sul valore 999.
 
 ---
 
 ## 4. Matrice di correlazione
 
 
-**Osservazioni critiche :**
+**Osservazioni critiche:**
 
-- **`duration` è il più correlato con il target (~0.41)**, di gran lunga. Ma è
-  proprio l'attributo da **escludere**: la durata è nota solo *dopo* la chiamata,
-  quando l'esito è già deciso. Questa correlazione alta è esattamente il **data
-  leakage** — spettacolare sui dati storici, inutile nella realtà. Verrà escluso nel
-  Task 5.
+- **Nessun predittore numerico è fortemente correlato con il target.** Le correlazioni con `y`
+  sono tutte modeste: la più alta in valore assoluto è **`nr.employed` (−0.355)**, seguita da
+  `pdays` (−0.325), `euribor3m` (−0.308), `emp.var.rate` (−0.298) e, con segno **positivo**,
+  `previous` (+0.230). È un segnale importante: la sola informazione numerica non basterà, e gli
+  **attributi nominali** avranno un ruolo determinante.
 - Le **variabili economiche** (`nr.employed`, `euribor3m`, `emp.var.rate`, `pdays`)
   sono **negativamente** correlate con `y`: quando l'economia "tira" (più occupati,
   tassi alti), i clienti sottoscrivono meno depositi.
@@ -88,43 +92,39 @@ Si osservano **scale molto diverse** (es. `nr.employed` ~5000 contro `previous`
 
 Mostra le relazioni a coppie e le distribuzioni sulla diagonale, colorando per
 classe. Viene fatto su un **sottoinsieme** di numeriche significative (`age`,
-`duration`, `campaign`, `euribor3m`, `nr.employed`) e su un **campione** di 2000
-istanze (su 41.000 punti il grafico sarebbe lento e sovraffollato).
+`campaign`, `euribor3m`, `nr.employed`) e su un **campione** di 2000
+istanze (su 41.000 punti il grafico sarebbe lento e sovraffollato), in versione *corner*.
 
-La classe `yes` tende a concentrarsi a **`duration` elevata** e a **`euribor3m`
-basso**, coerentemente con la matrice di correlazione.
+La separazione tra le due classi sulle sole variabili numeriche selezionate è generalmente
+**debole**: nessuna coppia di feature separa nettamente `yes` da `no`, a conferma della difficoltà
+del problema e del peso che avranno gli attributi nominali.
 
 ---
 
 ## 6. Analisi degli attributi nominali
 
 Per le variabili nominali l'indicatore più utile è il **tasso di sottoscrizione**
-(media di `y`) per categoria, visualizzato con barplot
-orizzontali.
+(media di `y`) per categoria, visualizzato con barplot orizzontali per `job`, `education`,
+`poutcome` e `month`.
 
 **Osservazioni:**
 
-- **`poutcome=success`** ha un tasso di sottoscrizione del **~65%** (contro l'~11%
-  medio): chi ha già aderito a una campagna precedente è molto propenso a riaderire.
-  È probabilmente l'attributo nominale più predittivo.
-- **`contact=cellular`** converte molto meglio di `telephone`.
-- Alcuni mesi (marzo, dicembre, settembre, ottobre) hanno tassi molto più alti: forte
-  **stagionalità**.
+- **`poutcome=success`** ha un tasso di sottoscrizione del **~65%** (esattamente 0.651, contro
+  l'~11% medio): chi ha già aderito a una campagna precedente è molto propenso a riaderire.
+  È probabilmente l'attributo nominale più predittivo (`failure` 0.142, `nonexistent` 0.088).
+- Alcuni mesi hanno tassi molto più alti della media: forte **stagionalità**.
+- Anche `job` ed `education` mostrano categorie con tassi nettamente sopra/sotto la media.
 
 ---
 
 ## 7. Sintesi e passo successivo
 
-- **Nessuna osservazione palesemente errata**; da interpretare solo `pdays=999` e gli
-  `unknown`.
-- **`duration`** è il più correlato col target ma va **escluso** dal modello (data
-  leakage).
+- **Nessuna osservazione palesemente errata**; da interpretare solo `pdays=999` e gli outlier di coda.
+- **Nessun predittore numerico forte**: la massima correlazione con `y` è ~0.36 (`nr.employed`).
 - Forte **multicollinearità** tra le variabili economiche.
-- Attributi nominali molto informativi: **`poutcome`**, `contact`, `month`.
+- Attributi nominali molto informativi: **`poutcome`**, `month`, e in misura minore `job`/`education`.
 
 **Prossimo passo (Task 4):** valutare i classificatori manuali (1R e Naïve Bayes) su
-`training.csv` e ottimizzarne le prestazioni.
+`training.csv` e discuterne i margini di ottimizzazione.
 
 ---
-
-

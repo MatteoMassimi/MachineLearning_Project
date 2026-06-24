@@ -39,12 +39,13 @@ MachineLearning_Project/
 │   ├── task4.md           # valutazione dei classificatori manuali
 │   └── task5.md           # addestramento con Scikit-Learn
 └── src/
-    ├── task1.ipynb               # preparazione del dataset
-    ├── task2_1R.ipynb            # classificatore manuale: 1R
-    ├── task2_NaiveBayes.ipynb    # classificatore manuale: Naïve Bayes
-    ├── task3.ipynb               # analisi esplorativa (EDA)
-    ├── task4.ipynb               # valutazione dei classificatori manuali
-    └── task5.ipynb               # addestramento con Scikit-Learn
+    ├── task1.ipynb                  # preparazione del dataset
+    ├── task2_1R.ipynb               # classificatore manuale: 1R
+    ├── task2_NaiveBayes.ipynb       # classificatore manuale: Naïve Bayes
+    ├── task3.ipynb                  # analisi esplorativa (EDA)
+    ├── task4_1R.ipynb               # valutazione del classificatore 1R
+    ├── task4_NaiveBayes.ipynb       # valutazione del classificatore Naïve Bayes
+    └── task5.ipynb                  # addestramento con Scikit-Learn
 ```
 
 > **Documentazione.** Il codice vive nei notebook in `src/`; la **documentazione
@@ -106,20 +107,23 @@ Ordine consigliato:
 1. `task1.ipynb` — genera `manuale.csv` e `training.csv`
 2. `task2_1R.ipynb` e `task2_NaiveBayes.ipynb` — classificatori manuali
 3. `task3.ipynb` — analisi esplorativa (EDA)
-4. `task4.ipynb` — valutazione dei classificatori manuali
+4. `task4_1R.ipynb` e `task4_NaiveBayes.ipynb` — valutazione dei classificatori manuali
 5. `task5.ipynb` — addestramento con Scikit-Learn
 
 ---
 
 ## Tasks del progetto
 
-1. **Preparazione del dataset** — pulizia ed estrazione di `manuale.csv` (12 istanze
-   per i calcoli a mano) e `training.csv` (dataset di lavoro).
+1. **Preparazione del dataset** — pulizia, rimozione di `duration` (*data leakage*) ed
+   estrazione di `manuale.csv` (12 istanze per i calcoli a mano) e `training.csv`
+   (dataset di lavoro, 20 attributi).
 2. **Classificatori manuali** — definizione e implementazione a mano di due modelli
    (1R e Naïve Bayes) su `manuale.csv`, in due notebook distinti.
 3. **Analisi esplorativa (EDA)** — controllo qualità, boxplot, pairplot, matrice di
    correlazione su `training.csv`.
-4. **Valutazione dei classificatori manuali** su `training.csv` e ottimizzazione.
-5. **Addestramento con Scikit-Learn** — più classificatori, holdout stratificato,
-   ottimizzazione degli iperparametri, selezione del modello migliore.
+4. **Valutazione dei classificatori manuali** su `training.csv` (in due notebook, uno
+   per 1R e uno per Naïve Bayes) e discussione dei limiti di ottimizzazione.
+5. **Addestramento con Scikit-Learn** — cinque classificatori, holdout stratificato 70/30,
+   cross-validation a 10 fold, ottimizzazione degli iperparametri (`GridSearchCV`),
+   selezione del modello migliore e curva di apprendimento.
 
