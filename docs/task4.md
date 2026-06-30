@@ -24,17 +24,7 @@ F1** e **matrice di confusione**. **Stile di codice** vettoriale, senza cicli `f
 
 ---
 
-## 2. Il baseline da battere
-
-Con classi sbilanciate, un classificatore "stupido" che predice **sempre `no`**
-ottiene già un'accuratezza di **~88.7%**, ma **recall su `yes` = 0%**. È il
-**riferimento minimo**: un modello utile deve fare meglio di così, soprattutto sul
-recall della classe `yes`. Questo dimostra subito perché l'accuratezza, da sola, è
-una metrica fuorviante su questo dataset.
-
----
-
-## 3. 1R su `training.csv` (`task4_1R.ipynb`)
+## 2. 1R su `training.csv` (`task4_1R.ipynb`)
 
 Si riprende il **modello 1R appreso nel Task 2** (attributo **`marital`**, regola
 `{divorced → 1, married → 0, single → 1}`) e la funzione `predici_1R`, applicata riga per riga.
@@ -66,7 +56,7 @@ Task 2) si traduca qui in **rigidità**.
 
 ---
 
-## 4. Naïve Bayes su `training.csv` (`task4_NaiveBayes.ipynb`)
+## 3. Naïve Bayes su `training.csv` (`task4_NaiveBayes.ipynb`)
 
 Si riprendono le **probabilità condizionate** del Task 2 (sulle tre feature `marital`, `housing`,
 `loan`, con Laplace) e la funzione `predici_naive_bayes`, applicata all'intero `training.csv`.
@@ -102,7 +92,7 @@ hanno effettivamente sottoscritto.
 
 ---
 
-## 5. Analisi critica dell'ottimizzazione
+## 4. Analisi critica dell'ottimizzazione
 
 Intervenire solo sulle probabilità a priori **non è una vera ottimizzazione**: sposta il modello
 lungo il trade-off precision/recall senza migliorarne il potere discriminante. Si ottengono solo
@@ -117,7 +107,7 @@ ricampionamento) — esulano dalla logica "a mano" di questo task e vengono affr
 
 ---
 
-## 6. Perché 1R e Naïve Bayes danno gli stessi risultati
+## 5. Perché 1R e Naïve Bayes danno gli stessi risultati
 
 I due classificatori producono **esattamente le stesse metriche originali**. **Non è una
 coincidenza**, ma una conseguenza diretta delle feature scelte nel Task 2. La decisione di Naïve
@@ -135,7 +125,7 @@ poco discriminanti **degeneri** in un classificatore a regola singola, indisting
 
 ---
 
-## 7. Passo successivo
+## 6. Passo successivo
 
 **Task 5:** addestrare più classificatori con Scikit-Learn, con preprocessing
 completo (one-hot, scaling in pipeline), gestione dello sbilanciamento (`class_weight`),

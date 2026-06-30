@@ -13,13 +13,12 @@ La traccia richiede, con riferimento a `training.csv`, di:
 1. addestrare tramite Scikit-Learn **più classificatori**;
 2. separare opportunamente i campioni in **training set** e **test set**;
 3. **massimizzare le prestazioni sul test set**;
-4. **descrivere e analizzare con spirito critico** le decisioni e i risultati;
-5. **selezionare il classificatore più performante**, che in sede d'esame sarà testato
-   sul file `real_settings.csv`.
+4. **descrivere e analizzare** le decisioni e i risultati;
+5. **selezionare il classificatore più performante**
 
 I **cinque classificatori** considerati sono: **Naïve Bayes**, **Regressione logistica**,
-**Albero di decisione**, **k-NN** e **Percettrone**. Il codice completo, eseguibile e commentato,
-si trova nel notebook `src/task5.ipynb`.
+**Albero di decisione**, **k-NN** e **Percettrone**.
+
 
 ---
 
@@ -38,7 +37,6 @@ Due esclusioni, per ragioni diverse, entrambe già motivate nei task precedenti:
 
 ## 3. Separazione train/test: holdout 70/30 stratificato
 
-Seguiamo lo schema della **Lezione 8** (*Valutazione*):
 
 - **Holdout 70/30**: il 70% dei dati per addestrare (28.823 campioni), il 30% — mai visto in
   addestramento — per la valutazione finale e imparziale (12.353 campioni).
@@ -48,16 +46,9 @@ Seguiamo lo schema della **Lezione 8** (*Valutazione*):
 - **`random_state=10`**: rende lo split riproducibile, in linea con la convenzione dei
   notebook del corso (`SEED = 10`).
 
-Il test set di holdout resta **completamente da parte**: è il sostituto "locale" del
-futuro `real_settings.csv`. La cross-validation (Sezione 7) e il tuning (Sezione 8) girano
-*dentro* il solo training set, senza mai toccare il test.
-
 ---
 
 ## 4. Preprocessing tramite `ColumnTransformer`
-
-Il cuore tecnico del task è un **`ColumnTransformer`** che applica il preprocessing corretto a
-ciascun tipo di attributo (Lezione 3 / 11):
 
 | Ramo | Trasformazione | Perché |
 |---|---|---|
@@ -78,7 +69,7 @@ quindi il preprocessing si limita a scaling e one-hot.
   classificatore, così da essere ri-adattato **dentro ogni fold** della cross-validation — l'unico
   modo corretto di validare e fare tuning senza leakage.
 
-`handle_unknown="ignore"` evita errori se nel test (o in `real_settings.csv`) comparisse una
+`handle_unknown="ignore"` evita errori se nel test comparisse una
 categoria mai vista in addestramento.
 
 ---
@@ -123,9 +114,9 @@ Risultati sul test set, ordinati per F1 sulla classe "yes":
 - **Albero, Regressione logistica** e (più debolmente) **Percettrone**, grazie a
   `class_weight="balanced"`, recuperano recall mantenendo una precision sostenibile: è il
   **trade-off desiderato** per una campagna di marketing.
-- **L'accuracy conferma di ingannare:** il k-NN ha l'accuratezza più alta (0.896, unico sopra il
-  baseline) ma F1 modesta; i due modelli con F1 migliore (Albero, Logistica) hanno accuratezza
-  *inferiore* al baseline. Su dati sbilanciati l'accuratezza misura il conformismo, non la capacità
+- **L'accuracy conferma di ingannare:** il k-NN ha l'accuratezza più alta
+  ma F1 modesta; i due modelli con F1 migliore (Albero, Logistica) hanno accuratezza
+  *inferiore*. Su dati sbilanciati l'accuratezza misura il conformismo, non la capacità
   di individuare la classe rara.
 
 `GaussianNB` è applicato sull'intera matrice one-hot per uniformità di pipeline: modella ogni
@@ -137,10 +128,9 @@ variabili economiche correlate — da cui il profilo "recall alta / precision ba
 ## 7. Cross-validation a 10 fold
 
 La valutazione holdout dipende dalla particolare suddivisione. Per una stima più robusta si applica
-una **Stratified 10-Fold Cross Validation** (Lezione 9) **solo sul training set**, con `Pipeline`
+una **Stratified 10-Fold Cross Validation solo sul training set**, con `Pipeline`
 (preprocessing + modello) ri-adattata in ogni fold e scoring **F1**. I cinque modelli sono raccolti
-in un dizionario e valutati in modo **vettoriale** con `Series.apply` (vincolo di stile: nessun
-ciclo `for` esplicito).
+in un dizionario e valutati in modo **vettoriale** con `Series.apply`.
 
 | Modello | F1 media (CV) | Dev. std |
 |---|---|---|
@@ -171,8 +161,7 @@ albero 0.473 vs 0.492), segno che non c'è memorizzazione del training.
 Il tuning usa `GridSearchCV` (stessa CV stratificata a 10 fold, scoring **F1**) sui **tre modelli**
 con maggiore potenziale o più sensibili agli iperparametri. **Naïve Bayes** e **Percettrone** sono
 **esclusi** (il primo non ha iperparametri che cambino il trade-off su questa matrice one-hot, il
-secondo è già il più debole e instabile). Anche qui niente cicli espliciti: le ricerche sono in un
-dizionario `{nome: (pipeline, griglia)}` lanciato con `Series.apply`.
+secondo è già il più debole e instabile).
 
 | Modello | Griglia | Selezionato | F1 CV | F1 test |
 |---|---|---|---|---|
@@ -222,59 +211,3 @@ realistiche (senza leakage), non un difetto del classificatore: un risultato one
 
 ---
 
-## 11. Predisposizione per `real_settings.csv`
-
-Il modello selezionato è una **pipeline completa già addestrata** (`preprocessing → classificatore`).
-Ricevuto `real_settings.csv`, **non** serve rifare manualmente encoding e scaling: basta caricarlo,
-rimuovere `duration`/`pdays` se presenti, e chiamare `predict`. La pipeline applica automaticamente
-le **stesse** trasformazioni apprese sul training, gestendo anche categorie nuove
-(`handle_unknown="ignore"`). Se il file conterrà la colonna `y`, si valuteranno le prestazioni con
-le stesse metriche usate qui. Il notebook contiene la cella-template pronta da eseguire.
-
----
-
-## 12. Domande d'esame probabili
-
-**D — Perché hai escluso `duration`?**
-È *data leakage*: la durata si conosce solo dopo la chiamata. È stata rimossa già nel Task 1, così
-tutti i task lavorano su dati realistici; usarla gonfierebbe i punteggi in laboratorio ma il modello
-crollerebbe su `real_settings.csv`.
-
-**D — Perché holdout *e* cross-validation insieme?**
-Ruoli diversi: la CV serve per il *tuning* degli iperparametri e gira solo sul training; l'holdout
-fornisce la stima *finale e imparziale* su dati mai visti. Fare tuning sul test sarebbe leakage.
-
-**D — Perché la pipeline e non trasformare i dati una volta sola all'inizio?**
-Per evitare leakage nel preprocessing: scaling e encoding devono apprendere i parametri solo dal
-training. La pipeline garantisce che ciò avvenga correttamente anche dentro ogni fold della CV.
-
-**D — Perché `class_weight="balanced"`?**
-Ripesa la *loss* a favore della classe rara senza alterare i dati. Si applica a Logistica, Albero e
-Percettrone; Naïve Bayes e k-NN non lo prevedono e per loro si potrebbe agire sulla soglia decisionale.
-
-**D — Perché ottimizzi la F1 e non l'accuracy?**
-Con l'11% di "yes" l'accuracy premia il classificatore banale "sempre no" (~88.7%). La F1 sulla
-classe positiva misura l'equilibrio tra precision e recall sulla classe che interessa davvero.
-
-**D — Perché 10 fold e non 5?**
-Addestra ogni modello su ~90% dei dati (meno *bias* nella stima della media); con ~29.000 campioni il
-costo doppio resta sostenibile. Le medie sono comunque quasi identiche a una 5-fold: stima robusta.
-
-**D — La curva di apprendimento cosa dice?**
-Underfitting (alto bias): training e validazione vicine e basse, appiattite presto. Più dati non
-aiutano; il limite è informativo, intrinseco al dataset senza `duration`.
-
----
-
-## 13. Concetti del corso utilizzati
-
-| Concetto | Lezione |
-|---|---|
-| Attributi numerici vs nominali | 3 |
-| Naïve Bayes, k-NN, alberi, modelli lineari (logistica, percettrone) | 5–7 |
-| Holdout, stratificazione, metriche, confusion matrix | 8 |
-| Cross-validation, tuning (`GridSearchCV`) | 9 |
-| Curva di apprendimento (bias/varianza) | 10 |
-| One-hot encoding, scaling | 11 |
-| Data leakage | trasversale |
-| Sbilanciamento delle classi e `class_weight` | trasversale |

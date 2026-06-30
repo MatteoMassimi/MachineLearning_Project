@@ -11,7 +11,7 @@
 
 1. **verificare** che il dataset non contenga osservazioni palesemente errate;
 2. effettuare l'**analisi esplorativa** (EDA), rappresentando i risultati anche in
-   forma grafica: **boxplot**, **pairplot** e **matrice di correlazione**.
+   forma grafica: **boxplot** e **matrice di correlazione**.
 
 > **Nota su `duration`.** A differenza di altre impostazioni del problema, qui `duration`
 > **non compare**: è stato **rimosso nel Task 1** perché costituisce *data leakage* (la durata
@@ -88,20 +88,8 @@ di variabili di conteggio, mentre `pdays` appare schiacciato sul valore 999.
 
 ---
 
-## 5. Pairplot
 
-Mostra le relazioni a coppie e le distribuzioni sulla diagonale, colorando per
-classe. Viene fatto su un **sottoinsieme** di numeriche significative (`age`,
-`campaign`, `euribor3m`, `nr.employed`) e su un **campione** di 2000
-istanze (su 41.000 punti il grafico sarebbe lento e sovraffollato), in versione *corner*.
-
-La separazione tra le due classi sulle sole variabili numeriche selezionate è generalmente
-**debole**: nessuna coppia di feature separa nettamente `yes` da `no`, a conferma della difficoltà
-del problema e del peso che avranno gli attributi nominali.
-
----
-
-## 6. Analisi degli attributi nominali
+## 5. Analisi degli attributi nominali
 
 Per le variabili nominali l'indicatore più utile è il **tasso di sottoscrizione**
 (media di `y`) per categoria, visualizzato con barplot orizzontali per `job`, `education`,
@@ -117,7 +105,7 @@ Per le variabili nominali l'indicatore più utile è il **tasso di sottoscrizion
 
 ---
 
-## 7. Sintesi e passo successivo
+## 5. Sintesi e passo successivo
 
 - **Nessuna osservazione palesemente errata**; da interpretare solo `pdays=999` e gli outlier di coda.
 - **Nessun predittore numerico forte**: la massima correlazione con `y` è ~0.36 (`nr.employed`).
